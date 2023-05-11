@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Please note: This script should be used inside AWS EC2 instance!!
 # Specify the desired volume size in GiB as a command line argument. If not specified, default to 20 GiB.
 SIZE=${1:-20}
 
