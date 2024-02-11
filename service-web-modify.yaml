@@ -1,0 +1,23 @@
+# Kubernetes Service https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-web
+spec:
+  selector:
+    app: my-nginx
+    #app.kubernetes.io/name: my-nginx
+  ports:
+    - name: nginx-service-port
+      protocol: TCP
+      # By default and for convenience, 
+      # the `targetPort` is set to the same value as the `port` field.
+      port: 8080     #8090
+      targetPort: 80
+      # Optional field
+      # By default and for convenience, 
+      # the Kubernetes control plane will allocate a port from a range (default: 30000-32767)
+      nodePort: 30080
+  type: LoadBalancer #NodePort
+ 
+      

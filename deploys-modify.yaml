@@ -1,0 +1,65 @@
+# Kubernetes Deployment
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+# https://kubernetes.io/docs/concepts/configuration/configmap/
+# https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#deployment-v1-apps
+# Deployment 1
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy1  # Unique key of the Deployment instance
+  labels:
+    app: my-nginx-deploy1
+spec:
+  replicas: 2   # 2 Pods should exist at all times.
+  selector:
+    matchLabels:
+      app: my-nginx
+  template:
+    metadata:
+      labels:   # Apply this label to pods and 
+                # default the Deployment label selector to this value
+        app: my-nginx
+    spec:
+      containers:
+      - name: nginx-containers
+        image: nginx:1.25.1 # run this nginx version image.
+        ports:
+        - containerPort: 18080
+        volumeMounts:
+        - name: configmap-vol1
+          mountPath: /usr/share/nginx/html
+      volumes: # You set volumes at the Pod level, 
+               # then mount them into containers inside that Pod
+      - name: configmap-vol1
+        configMap: # Provide the name of the ConfigMap you want to mount.
+          name: configmap-web1
+---
+# Deployment 2
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy2
+  labels:
+    app: my-nginx-deploy2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-nginx
+  template:
+    metadata:
+      labels:
+        app: my-nginx
+    spec:
+      containers:
+      - name: nginx-containers
+        image: nginx:1.25.1
+        ports:
+        - containerPort: 18080
+        volumeMounts:
+        - name: configmap-vol2
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: configmap-vol2
+        configMap:
+          name: configmap-web2
